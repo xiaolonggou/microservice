@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"log"
 	"net/http"
 
@@ -18,11 +17,9 @@ func NewArtPiece(l *log.Logger) *ArtPiece {
 
 func (ap *ArtPiece) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	la := data.GetArtPieceList()
-	d, err := json.Marshal(la)
+	error := la.ToJson(rw)
 
-	if err != nil {
+	if error != nil {
 		http.Error(rw, "unable to marshal json", http.StatusInternalServerError)
 	}
-
-	rw.Write(d)
 }

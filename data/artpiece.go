@@ -1,5 +1,10 @@
 package data
 
+import (
+	"encoding/json"
+	"io"
+)
+
 type ArtPiece struct {
 	ID             int    `json:"id"`
 	Format         string `json:"format"`
@@ -9,7 +14,14 @@ type ArtPiece struct {
 	LearnedAboutOn string `json:"-"`
 }
 
-func GetArtPieceList() []*ArtPiece {
+type ArtPieces []*ArtPiece
+
+func (a *ArtPieces) ToJson(w io.Writer) error {
+	encoder := json.NewEncoder(w)
+	return encoder.Encode(a)
+}
+
+func GetArtPieceList() ArtPieces {
 	return artList
 }
 
