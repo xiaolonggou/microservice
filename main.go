@@ -14,12 +14,11 @@ import (
 func main() {
 	l := log.New(os.Stdout, "service-api", log.LstdFlags)
 
-	hl := handlers.NewHello(l)
+	aph := handlers.NewArtPiece(l)
 	bh := handlers.NewBye(l)
-
 	sm := http.NewServeMux()
 
-	sm.Handle("/", hl)
+	sm.Handle("/", aph)
 	sm.Handle("/bye", bh)
 
 	s := &http.Server{
