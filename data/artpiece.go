@@ -2,6 +2,7 @@ package data
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 )
 
@@ -24,6 +25,31 @@ func (a *ArtPiece) FromJson(r io.Reader) error {
 func (a *ArtPieces) ToJson(w io.Writer) error {
 	encoder := json.NewEncoder(w)
 	return encoder.Encode(a)
+}
+
+func UpdateArtPiece(id int, ap *ArtPiece) error {
+	_, pos, err := findArtPiece(id)
+	if err != nil {
+		return err
+	}
+
+	//input ID is replaced by generated ID
+	ap.ID = id
+	artList[pos] = ap
+
+	return nil
+}
+
+var ErrorArtPieceNotFound = fmt.Errorf("Art Piece not found")
+
+func findArtPiece(id int) (*ArtPiece, int, error) {
+	for i, ap := range artList {
+		if ap.ID == id {
+			return ap, i, nil
+		}
+	}
+
+	return nil, -1, ErrorArtPieceNotFound
 }
 
 func GetArtPieceList() ArtPieces {
@@ -54,7 +80,7 @@ var artList = []*ArtPiece{
 	&ArtPiece{
 		ID:             2,
 		Format:         "song",
-		Creator:        "Knef",
+		Creator:        "Hildegard Knef",
 		Description:    "es soll für mich rote Rosen regnen",
 		CreationOn:     "09-10-1960",
 		LearnedAboutOn: "01-12-2021",

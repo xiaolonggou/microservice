@@ -13,7 +13,7 @@ import (
 
 func main() {
 	l := log.New(os.Stdout, "service-api", log.LstdFlags)
-
+	l.Println("logger initated")
 	aph := handlers.NewArtPiece(l)
 	bh := handlers.NewBye(l)
 	sm := http.NewServeMux()
@@ -28,9 +28,11 @@ func main() {
 		ReadTimeout:  1 * time.Second,
 		WriteTimeout: 1 * time.Second,
 	}
-
+	l.Println("server starting...")
 	go func() {
+		l.Println("serving HTTP...")
 		err := s.ListenAndServe()
+
 		if err != nil {
 			l.Fatal(err)
 		}
