@@ -16,6 +16,11 @@ type ArtPiece struct {
 
 type ArtPieces []*ArtPiece
 
+func (a *ArtPiece) FromJson(r io.Reader) error {
+	e := json.NewDecoder(r)
+	return e.Decode(a)
+}
+
 func (a *ArtPieces) ToJson(w io.Writer) error {
 	encoder := json.NewEncoder(w)
 	return encoder.Encode(a)
@@ -23,6 +28,17 @@ func (a *ArtPieces) ToJson(w io.Writer) error {
 
 func GetArtPieceList() ArtPieces {
 	return artList
+}
+
+func AddArtPiece(ap *ArtPiece) {
+	ap.ID = getNextID()
+
+	artList = append(artList, ap)
+}
+
+func getNextID() int {
+	ap := artList[len(artList)-1]
+	return ap.ID + 1
 }
 
 var artList = []*ArtPiece{
