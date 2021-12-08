@@ -1,4 +1,4 @@
-module xiaolong.com/v2
+module github.com/xiaolonggou/microservice/v1
 
 go 1.17
 

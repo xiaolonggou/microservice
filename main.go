@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	"xiaolong.com/v2/handlers"
+	"github.com/xiaolonggou/microservice/v1/handlers"
 )
 
 func main() {
