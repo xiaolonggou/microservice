@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"strconv"
@@ -29,16 +30,9 @@ func (ap *ArtPiece) UpdateArtPiece(rw http.ResponseWriter, r *http.Request) {
 
 	ap.l.Println("handle http PUT ArtPiece request")
 
-	apiece := &data.ArtPiece{}
+	apiece := r.Context().Value(KeyArtPiece{}).(*data.ArtPiece)
 
-	err := apiece.FromJson(r.Body)
-
-	if err != nil {
-		ap.l.Printf("error %#v", err)
-		http.Error(rw, "Unable to unmarshal json", http.StatusBadRequest)
-	}
-
-	err = data.UpdateArtPiece(artpiceId, apiece)
+	err := data.UpdateArtPiece(artpiceId, apiece)
 	if err == data.ErrorArtPieceNotFound {
 		http.Error(rw, "Art piece not found.", http.StatusNotFound)
 		return
@@ -46,6 +40,27 @@ func (ap *ArtPiece) UpdateArtPiece(rw http.ResponseWriter, r *http.Request) {
 		http.Error(rw, "Art piece not found.", http.StatusInternalServerError)
 		return
 	}
+}
+
+type KeyArtPiece struct{}
+
+func (ap ArtPiece) MiddlewareArtPieceValidation(next http.Handler) http.Handler {
+
+	return http.HandlerFunc(
+		func(rw http.ResponseWriter, r *http.Request) {
+			apiece := &data.ArtPiece{}
+
+			err := apiece.FromJson(r.Body)
+			if err != nil {
+				ap.l.Printf("error %#v", err)
+				http.Error(rw, "Unable to unmarshal json", http.StatusBadRequest)
+				return
+			}
+			ctx := context.WithValue(r.Context(), KeyArtPiece{}, apiece)
+			req := r.WithContext(ctx)
+			next.ServeHTTP(rw, req)
+		})
+
 }
 
 func (ap *ArtPiece) GetArtPieces(rw http.ResponseWriter, r *http.Request) {
@@ -61,14 +76,7 @@ func (ap *ArtPiece) GetArtPieces(rw http.ResponseWriter, r *http.Request) {
 func (ap *ArtPiece) AddArtPiece(rw http.ResponseWriter, r *http.Request) {
 	ap.l.Println("handle http POST ArtPiece request")
 
-	apiece := &data.ArtPiece{}
-
-	err := apiece.FromJson(r.Body)
-
-	if err != nil {
-		ap.l.Printf("error %#v", err)
-		http.Error(rw, "Unable to unmarshal json", http.StatusBadRequest)
-	}
+	apiece := r.Context().Value(KeyArtPiece{}).(*data.ArtPiece)
 
 	data.AddArtPiece(apiece)
 }

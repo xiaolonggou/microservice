@@ -23,9 +23,11 @@ func main() {
 
 	putRouter := sm.Methods(http.MethodPut).Subrouter()
 	putRouter.HandleFunc("/{id:[0-9]+}", aph.UpdateArtPiece)
+	putRouter.Use(aph.MiddlewareArtPieceValidation)
 
 	postRouter := sm.Methods(http.MethodPost).Subrouter()
 	postRouter.HandleFunc("/", aph.AddArtPiece)
+	postRouter.Use(aph.MiddlewareArtPieceValidation)
 
 	s := &http.Server{
 		Addr:         ":9090",
