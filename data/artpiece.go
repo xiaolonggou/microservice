@@ -4,13 +4,17 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"regexp"
+
+	"gopkg.in/go-playground/validator.v9"
 )
 
 type ArtPiece struct {
 	ID             int    `json:"id"`
-	Format         string `json:"format"`
-	Creator        string `json:"creator"`
-	Description    string `json:"-"`
+	Format         string `json:"format" validate:"required"`
+	Creator        string `json:"creator" validate:"required"`
+	LastSoldat     int    `json:"price" validate:"gte=0"`
+	Description    string `json:"-" validate:"required,description"`
 	CreationOn     string `json:"-"`
 	LearnedAboutOn string `json:"-"`
 }
@@ -20,6 +24,28 @@ type ArtPieces []*ArtPiece
 func (a *ArtPiece) FromJson(r io.Reader) error {
 	e := json.NewDecoder(r)
 	return e.Decode(a)
+}
+
+func (a *ArtPiece) Validate() error {
+	validate := validator.New()
+	validate.RegisterValidation("description", validateDesc)
+	return validate.Struct(a)
+}
+
+func validateDesc(fl validator.FieldLevel) bool {
+	re := regexp.MustCompile(`[A-Z]`)
+
+	matches := re.FindAllString(fl.Field().String(), -1)
+
+	if len(matches) != 1 {
+		return false
+	}
+
+	if fl.Field().String() == "invalid" {
+		return false
+	}
+
+	return true
 }
 
 func (a *ArtPieces) ToJson(w io.Writer) error {
@@ -40,7 +66,7 @@ func UpdateArtPiece(id int, ap *ArtPiece) error {
 	return nil
 }
 
-var ErrorArtPieceNotFound = fmt.Errorf("Art Piece not found")
+var ErrorArtPieceNotFound = fmt.Errorf("art piece not found")
 
 func findArtPiece(id int) (*ArtPiece, int, error) {
 	for i, ap := range artList {
