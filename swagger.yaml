@@ -1,3 +1,12 @@
 info: {}
-paths: {}
+paths:
+  /art:
+    get:
+      description: Returns a list of art pieces
+      operationId: listArtPieces
+      responses:
+        "200":
+          $ref: '#/responses/artPieceResponse'
+      tags:
+      - pieces
 swagger: "2.0"
