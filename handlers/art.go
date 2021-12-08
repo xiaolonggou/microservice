@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -52,10 +53,20 @@ func (ap ArtPiece) MiddlewareArtPieceValidation(next http.Handler) http.Handler 
 
 			err := apiece.FromJson(r.Body)
 			if err != nil {
-				ap.l.Printf("error %#v", err)
+				ap.l.Printf("[Error] %#v", err)
 				http.Error(rw, "Unable to unmarshal json", http.StatusBadRequest)
 				return
 			}
+
+			//validate the art piece
+			err = apiece.Validate()
+			if err != nil {
+				ap.l.Printf("[Error] %#v", err)
+				http.Error(rw, fmt.Sprintf("Unable to validate input json: %s", err), http.StatusBadRequest)
+				ap.l.Println(apiece)
+				return
+			}
+
 			ctx := context.WithValue(r.Context(), KeyArtPiece{}, apiece)
 			req := r.WithContext(ctx)
 			next.ServeHTTP(rw, req)

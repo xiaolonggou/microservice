@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"regexp"
 
 	"gopkg.in/go-playground/validator.v9"
 )
@@ -14,7 +13,7 @@ type ArtPiece struct {
 	Format         string `json:"format" validate:"required"`
 	Creator        string `json:"creator" validate:"required"`
 	LastSoldat     int    `json:"price" validate:"gte=0"`
-	Description    string `json:"-" validate:"required,description"`
+	Description    string `json:"description" validate:"required,description"`
 	CreationOn     string `json:"-"`
 	LearnedAboutOn string `json:"-"`
 }
@@ -33,19 +32,13 @@ func (a *ArtPiece) Validate() error {
 }
 
 func validateDesc(fl validator.FieldLevel) bool {
-	re := regexp.MustCompile(`[A-Z]`)
+	descStr := fl.Field().String()
 
-	matches := re.FindAllString(fl.Field().String(), -1)
-
-	if len(matches) != 1 {
-		return false
+	if len(descStr) > 5 {
+		return true
 	}
 
-	if fl.Field().String() == "invalid" {
-		return false
-	}
-
-	return true
+	return false
 }
 
 func (a *ArtPieces) ToJson(w io.Writer) error {
