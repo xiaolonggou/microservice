@@ -8,6 +8,7 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/gorilla/mux"
 	"xiaolong.com/v2/handlers"
 )
 
@@ -15,11 +16,16 @@ func main() {
 	l := log.New(os.Stdout, "service-api", log.LstdFlags)
 	l.Println("logger initated")
 	aph := handlers.NewArtPiece(l)
-	bh := handlers.NewBye(l)
-	sm := http.NewServeMux()
+	sm := mux.NewRouter()
 
-	sm.Handle("/", aph)
-	sm.Handle("/bye", bh)
+	getRouter := sm.Methods(http.MethodGet).Subrouter()
+	getRouter.HandleFunc("/", aph.GetArtPieces)
+
+	putRouter := sm.Methods(http.MethodPut).Subrouter()
+	putRouter.HandleFunc("/{id:[0-9]+}", aph.UpdateArtPiece)
+
+	postRouter := sm.Methods(http.MethodPost).Subrouter()
+	postRouter.HandleFunc("/", aph.AddArtPiece)
 
 	s := &http.Server{
 		Addr:         ":9090",
