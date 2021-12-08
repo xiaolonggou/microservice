@@ -11,7 +11,7 @@ Test 1:
               },
               {
                 "id": 2,
-                "format": "song",
+                "format": "song", 
                 "creator": "Hildegard Knef"
               }
             ]
