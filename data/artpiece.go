@@ -99,6 +99,17 @@ func GetArtPieceList() ArtPieces {
 	return artList
 }
 
+func DeleteArtPiece(id int) error {
+	_, i, err := findArtPiece(id)
+
+	if err != nil {
+		return err
+	}
+	artList = append(artList[:i], artList[i+1])
+
+	return nil
+}
+
 func AddArtPiece(ap *ArtPiece) {
 	ap.ID = getNextID()
 
