@@ -8,13 +8,37 @@ import (
 	"gopkg.in/go-playground/validator.v9"
 )
 
+// ArtPiece defines the structure for an API product
+// swagger:model
 type ArtPiece struct {
-	ID             int    `json:"id"`
-	Format         string `json:"format" validate:"required"`
-	Creator        string `json:"creator" validate:"required"`
-	LastSoldat     int    `json:"price" validate:"gte=0"`
-	Description    string `json:"description" validate:"required,description"`
-	CreationOn     string `json:"-"`
+	// the id for the art piece
+	//
+	// required: false
+	// min: 1
+	ID int `json:"id"`
+	// the format of the art piece
+	//
+	// required: true
+	Format string `json:"format" validate:"required"`
+	// the creator of the art piece
+	//
+	// required: true
+	Creator string `json:"creator" validate:"required"`
+	// the last deal of the art piece
+	//
+	// required: false
+	LastSoldat int `json:"price" validate:"gte=0"`
+	// the description of the art piece
+	//
+	// required: false
+	Description string `json:"description" validate:"required,description"`
+	// the creation time of the art piece
+	//
+	// required: false
+	CreationOn string `json:"-"`
+	// learned about time of the art piece
+	//
+	// required: false
 	LearnedAboutOn string `json:"-"`
 }
 
