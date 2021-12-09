@@ -31,7 +31,7 @@ func main() {
 	postRouter.Use(aph.MiddlewareArtPieceValidation)
 
 	deleteRouter := sm.Methods(http.MethodDelete).Subrouter()
-	deleteRouter.HandleFunc("/art/{id:[0-9]+}", aph.DeleteartPiece)
+	deleteRouter.HandleFunc("/art/{id:[0-9]+}", aph.DeleteArtPiece)
 
 	opts := middleware.RedocOpts{SpecURL: "/swagger.yaml"}
 	sh := middleware.Redoc(opts, nil)

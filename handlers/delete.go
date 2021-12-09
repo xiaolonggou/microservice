@@ -8,7 +8,15 @@ import (
 	"github.com/xiaolonggou/microservice/v1/data"
 )
 
-func (ap *ArtPiece) DeleteartPiece(rw http.ResponseWriter, r *http.Request) {
+// swagger:route DELETE /art/{id} artpieces DeleteartPiece
+// Delete an art piece
+//
+// responses:
+//	201: noContentResponse
+//  404: errorResponse
+//  501: errorResponse
+
+func (ap *ArtPiece) DeleteArtPiece(rw http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
 	id, _ := strconv.Atoi(vars["id"])

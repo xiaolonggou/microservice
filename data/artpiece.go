@@ -105,7 +105,12 @@ func DeleteArtPiece(id int) error {
 	if err != nil {
 		return err
 	}
-	artList = append(artList[:i], artList[i+1])
+
+	if i < len(artList)-1 {
+		artList = append(artList[:i], artList[i+1])
+	} else if i == len(artList)-1 {
+		artList = artList[0 : len(artList)-1]
+	}
 
 	return nil
 }
@@ -117,6 +122,11 @@ func AddArtPiece(ap *ArtPiece) {
 }
 
 func getNextID() int {
+
+	if len(artList) == 0 {
+		return 1
+	}
+
 	ap := artList[len(artList)-1]
 	return ap.ID + 1
 }
