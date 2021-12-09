@@ -1,25 +1,3 @@
-definitions:
-  ArtPiece:
-    properties:
-      creator:
-        type: string
-        x-go-name: Creator
-      description:
-        type: string
-        x-go-name: Description
-      format:
-        type: string
-        x-go-name: Format
-      id:
-        format: int64
-        type: integer
-        x-go-name: ID
-      price:
-        format: int64
-        type: integer
-        x-go-name: LastSoldat
-    type: object
-    x-go-package: github.com/xiaolonggou/microservice/v1/data
 info: {}
 paths:
   /art:
@@ -31,11 +9,4 @@ paths:
           $ref: '#/responses/artPieceResponse'
       tags:
       - pieces
-responses:
-  artPiecesResponse:
-    description: A list of art pieces returns in the reponse
-    schema:
-      items:
-        $ref: '#/definitions/ArtPiece'
-      type: array
 swagger: "2.0"
