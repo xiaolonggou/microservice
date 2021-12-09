@@ -8,7 +8,7 @@ import (
 	"github.com/xiaolonggou/microservice/v1/data"
 )
 
-// swagger:route DELETE /art/{id} artpieces DeleteartPiece
+// swagger:route DELETE /art/{id} artpieces DeleteArtPiece
 // Delete an art piece
 //
 // responses:
