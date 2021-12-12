@@ -23,7 +23,7 @@ func (ap *ArtPiece) DeleteArtPiece(rw http.ResponseWriter, r *http.Request) {
 
 	ap.l.Println("Handle DELETE art piece", id)
 
-	err := data.DeleteArtPiece(id)
+	err := data.DeleteArtPiece(id, ap.l)
 
 	if err == data.ErrorArtPieceNotFound {
 		http.Error(rw, "Art not found", http.StatusNotFound)

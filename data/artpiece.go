@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 
 	"gopkg.in/go-playground/validator.v9"
 )
@@ -30,7 +31,7 @@ type ArtPiece struct {
 	LastSoldat int `json:"price" validate:"gte=0"`
 	// the description of the art piece
 	//
-	// required: false
+	// required: true
 	Description string `json:"description" validate:"required,description"`
 	// the creation time of the art piece
 	//
@@ -42,6 +43,7 @@ type ArtPiece struct {
 	LearnedAboutOn string `json:"-"`
 }
 
+// ArtPieceList returns a list of art pieces
 type ArtPieces []*ArtPiece
 
 func (a *ArtPiece) FromJson(r io.Reader) error {
@@ -99,19 +101,26 @@ func GetArtPieceList() ArtPieces {
 	return artList
 }
 
-func DeleteArtPiece(id int) error {
+func DeleteArtPiece(id int, l *log.Logger) error {
 	_, i, err := findArtPiece(id)
 
 	if err != nil {
 		return err
 	}
 
-	if i < len(artList)-1 {
-		artList = append(artList[:i], artList[i+1])
-	} else if i == len(artList)-1 {
-		artList = artList[0 : len(artList)-1]
+	l.Println("delete index:", i)
+	l.Println("array index:", len(artList))
+
+	newList := make([]*ArtPiece, len(artList)-1)
+	indexOld := 0
+	for indexNew := 0; indexOld <= len(artList)-1; indexOld++ {
+		if indexOld != i {
+			newList[indexNew] = artList[indexOld]
+			indexNew++
+		}
 	}
 
+	artList = newList
 	return nil
 }
 
@@ -132,7 +141,7 @@ func getNextID() int {
 }
 
 var artList = []*ArtPiece{
-	&ArtPiece{
+	{
 		ID:             1,
 		Format:         "oil on canvas",
 		Creator:        "Vincent Van Gogh",
@@ -141,7 +150,7 @@ var artList = []*ArtPiece{
 		LearnedAboutOn: "25-11-2021",
 	},
 
-	&ArtPiece{
+	{
 		ID:             2,
 		Format:         "song",
 		Creator:        "Hildegard Knef",
