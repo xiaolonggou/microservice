@@ -1,49 +1,32 @@
 package handlers
 
 import (
-	"context"
 	"fmt"
-	"log"
-	"net/http"
 
+	"github.com/hashicorp/go-hclog"
 	"github.com/xiaolonggou/microservice/v1/data"
 )
 
 type ArtPiece struct {
-	l *log.Logger
+	l hclog.Logger
+	v *data.Validation
 }
 
-func NewArtPiece(l *log.Logger) *ArtPiece {
-	return &ArtPiece{l}
+func NewArtPiece(l hclog.Logger, v *data.Validation) *ArtPiece {
+	return &ArtPiece{l, v}
 }
 
 type KeyArtPiece struct{}
 
-func (ap ArtPiece) MiddlewareArtPieceValidation(next http.Handler) http.Handler {
+// ErrInvalidProductPath is an error message when the product path is not valid
+var ErrInvalidProductPath = fmt.Errorf("Invalid Path, path should be /products/[id]")
 
-	return http.HandlerFunc(
-		func(rw http.ResponseWriter, r *http.Request) {
-			apiece := &data.ArtPiece{}
+// GenericError is a generic error message returned by a server
+type GenericError struct {
+	Message string `json:"message"`
+}
 
-			err := apiece.FromJson(r.Body)
-			if err != nil {
-				ap.l.Printf("[Error] %#v", err)
-				http.Error(rw, "Unable to unmarshal json", http.StatusBadRequest)
-				return
-			}
-
-			//validate the art piece
-			err = apiece.Validate()
-			if err != nil {
-				ap.l.Printf("[Error] %#v", err)
-				http.Error(rw, fmt.Sprintf("Unable to validate input json: %s", err), http.StatusBadRequest)
-				ap.l.Println(apiece)
-				return
-			}
-
-			ctx := context.WithValue(r.Context(), KeyArtPiece{}, apiece)
-			req := r.WithContext(ctx)
-			next.ServeHTTP(rw, req)
-		})
-
+// ValidationError is a collection of validation error messages
+type ValidationError struct {
+	Messages []string `json:"messages"`
 }

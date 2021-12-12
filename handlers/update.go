@@ -18,7 +18,7 @@ func (ap *ArtPiece) UpdateArtPiece(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	ap.l.Println("handle http PUT ArtPiece request")
+	ap.l.Debug("handle http PUT ArtPiece request")
 
 	apiece := r.Context().Value(KeyArtPiece{}).(*data.ArtPiece)
 

@@ -4,7 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
+
+	"github.com/hashicorp/go-hclog"
 )
 
 // ArtPiece defines the structure for an API product
@@ -49,9 +50,9 @@ func (a *ArtPiece) FromJson(r io.Reader) error {
 	return e.Decode(a)
 }
 
-func (a *ArtPieces) ToJson(w io.Writer) error {
+func ToJson(i interface{}, w io.Writer) error {
 	encoder := json.NewEncoder(w)
-	return encoder.Encode(a)
+	return encoder.Encode(i)
 }
 
 func UpdateArtPiece(id int, ap *ArtPiece) error {
@@ -83,15 +84,15 @@ func GetArtPieceList() ArtPieces {
 	return artList
 }
 
-func DeleteArtPiece(id int, l *log.Logger) error {
+func DeleteArtPiece(id int, l hclog.Logger) error {
 	_, i, err := findArtPiece(id)
 
 	if err != nil {
 		return err
 	}
 
-	l.Println("delete index:", i)
-	l.Println("array index:", len(artList))
+	l.Debug("delete index:", i)
+	l.Debug("array index:", len(artList))
 
 	newList := make([]*ArtPiece, len(artList)-1)
 	indexOld := 0

@@ -7,7 +7,7 @@ import (
 )
 
 func (ap *ArtPiece) AddArtPiece(rw http.ResponseWriter, r *http.Request) {
-	ap.l.Println("handle http POST ArtPiece request")
+	ap.l.Debug("handle http POST ArtPiece request")
 
 	apiece := r.Context().Value(KeyArtPiece{}).(*data.ArtPiece)
 

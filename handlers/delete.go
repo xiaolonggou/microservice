@@ -21,7 +21,7 @@ func (ap *ArtPiece) DeleteArtPiece(rw http.ResponseWriter, r *http.Request) {
 
 	id, _ := strconv.Atoi(vars["id"])
 
-	ap.l.Println("Handle DELETE art piece", id)
+	ap.l.Debug("Handle DELETE art piece", id)
 
 	err := data.DeleteArtPiece(id, ap.l)
 

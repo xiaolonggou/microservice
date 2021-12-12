@@ -10,13 +10,15 @@ import (
 
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/gorilla/mux"
+	"github.com/hashicorp/go-hclog"
+	"github.com/xiaolonggou/microservice/v1/data"
 	"github.com/xiaolonggou/microservice/v1/handlers"
 )
 
 func main() {
-	l := log.New(os.Stdout, "service-api", log.LstdFlags)
-	l.Println("logger initated")
-	aph := handlers.NewArtPiece(l)
+	l := hclog.Default()
+	v := data.NewValidation()
+	aph := handlers.NewArtPiece(l, v)
 	sm := mux.NewRouter()
 
 	getRouter := sm.Methods(http.MethodGet).Subrouter()
@@ -48,13 +50,14 @@ func main() {
 		ReadTimeout:  1 * time.Second,
 		WriteTimeout: 1 * time.Second,
 	}
-	l.Println("server starting...")
+	l.Debug("server starting...")
 	go func() {
-		l.Println("serving HTTP...")
+		l.Debug("serving HTTP...")
 		err := s.ListenAndServe()
 
 		if err != nil {
-			l.Fatal(err)
+			l.Error("Error starting server", "error", err)
+			os.Exit(1)
 		}
 	}()
 
@@ -63,9 +66,7 @@ func main() {
 	signal.Notify(sigChan, os.Kill)
 
 	sig := <-sigChan
-
-	l.Println("gracefully shutdown", sig)
-
+	log.Println("Got signal:", sig)
 	tc, _ := context.WithTimeout(context.Background(), 30*time.Second)
 	s.Shutdown(tc)
 }
