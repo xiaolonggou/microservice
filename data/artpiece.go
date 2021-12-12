@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"io"
 	"log"
-
-	"gopkg.in/go-playground/validator.v9"
 )
 
 // ArtPiece defines the structure for an API product
@@ -49,22 +47,6 @@ type ArtPieces []*ArtPiece
 func (a *ArtPiece) FromJson(r io.Reader) error {
 	e := json.NewDecoder(r)
 	return e.Decode(a)
-}
-
-func (a *ArtPiece) Validate() error {
-	validate := validator.New()
-	validate.RegisterValidation("description", validateDesc)
-	return validate.Struct(a)
-}
-
-func validateDesc(fl validator.FieldLevel) bool {
-	descStr := fl.Field().String()
-
-	if len(descStr) > 5 {
-		return true
-	}
-
-	return false
 }
 
 func (a *ArtPieces) ToJson(w io.Writer) error {
