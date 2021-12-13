@@ -18,8 +18,8 @@ package handlers
 import "github.com/xiaolonggou/microservice/v1/data"
 
 // A list of art pieces
-// swagger:response artPiecesResponse
-type artPiecesResponseWrapper struct {
+// swagger:response artPieceResponse
+type artPieceResponseWrapper struct {
 	// All art pieces in the system
 	// in: body
 	Body []data.ArtPiece
@@ -36,4 +36,16 @@ type artIDParamsWrapper struct {
 // No content is returned by this API endpoint
 // swagger:response noContentResponse
 type noContentResponseWrapper struct {
+}
+
+//
+// NOTE: Types defined here are purely for documentation purposes
+// these types are not used by any of the handers
+
+// Generic error message returned as a string
+// swagger:response errorResponse
+type errorResponseWrapper struct {
+	// Description of the error
+	// in: body
+	Body GenericError
 }

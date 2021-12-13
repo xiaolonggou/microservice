@@ -22,14 +22,14 @@ func main() {
 	sm := mux.NewRouter()
 
 	getRouter := sm.Methods(http.MethodGet).Subrouter()
-	getRouter.HandleFunc("/", aph.GetArtPieces)
+	getRouter.HandleFunc("/arts", aph.GetArtPieces)
 
 	putRouter := sm.Methods(http.MethodPut).Subrouter()
 	putRouter.HandleFunc("/{id:[0-9]+}", aph.UpdateArtPiece)
 	putRouter.Use(aph.MiddlewareArtPieceValidation)
 
 	postRouter := sm.Methods(http.MethodPost).Subrouter()
-	postRouter.HandleFunc("/", aph.AddArtPiece)
+	postRouter.HandleFunc("/arts", aph.AddArtPiece)
 	postRouter.Use(aph.MiddlewareArtPieceValidation)
 
 	deleteRouter := sm.Methods(http.MethodDelete).Subrouter()
@@ -50,8 +50,9 @@ func main() {
 		ReadTimeout:  1 * time.Second,
 		WriteTimeout: 1 * time.Second,
 	}
-	l.Debug("server starting...")
+
 	go func() {
+		l.Info("server starting...")
 		l.Debug("serving HTTP...")
 		err := s.ListenAndServe()
 
