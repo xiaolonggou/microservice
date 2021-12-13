@@ -6,7 +6,7 @@ import (
 	"github.com/xiaolonggou/microservice/v1/data"
 )
 
-// swagger:route GET /art arts listArtPieces
+// swagger:route GET /arts arts listArtPieces
 // Returns a list of art pieces
 // responses:
 //	200: artPieceResponse
