@@ -1,0 +1,123 @@
+{
+	"info": {
+		"_postman_id": "a9dfcf99-49a3-424a-a706-7d14526bb7fd",
+		"name": "Microservice",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:9090/arts",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "9090",
+					"path": [
+						"arts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST NEW",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"creator\":\"Conner\",\r\n    \"format\":\"saying\",\r\n    \"description\":\"fantastic\"\r\n}"
+				},
+				"url": {
+					"raw": "127.0.0.1:9090/arts",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "9090",
+					"path": [
+						"arts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete art piece",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:9090/arts/2",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "9090",
+					"path": [
+						"arts",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update an art piece",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\":1,\r\n    \"creator\":\"Conner\",\r\n    \"format\":\"saying\",\r\n    \"description\":\"fantastic, shiny and brand new\"\r\n}"
+				},
+				"url": {
+					"raw": "127.0.0.1:9090/arts",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "9090",
+					"path": [
+						"arts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET docs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:9090/docs",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "9090",
+					"path": [
+						"docs"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

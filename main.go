@@ -25,15 +25,15 @@ func main() {
 	getRouter.HandleFunc("/arts", aph.GetArtPieces)
 
 	putRouter := sm.Methods(http.MethodPut).Subrouter()
-	putRouter.HandleFunc("/{id:[0-9]+}", aph.UpdateArtPiece)
+	putRouter.HandleFunc("/arts", aph.Update)
 	putRouter.Use(aph.MiddlewareArtPieceValidation)
 
 	postRouter := sm.Methods(http.MethodPost).Subrouter()
-	postRouter.HandleFunc("/arts", aph.AddArtPiece)
+	postRouter.HandleFunc("/arts", aph.Create)
 	postRouter.Use(aph.MiddlewareArtPieceValidation)
 
 	deleteRouter := sm.Methods(http.MethodDelete).Subrouter()
-	deleteRouter.HandleFunc("/art/{id:[0-9]+}", aph.DeleteArtPiece)
+	deleteRouter.HandleFunc("/arts/{id:[0-9]+}", aph.DeleteArtPiece)
 
 	opts := middleware.RedocOpts{SpecURL: "/swagger.yaml"}
 	sh := middleware.Redoc(opts, nil)

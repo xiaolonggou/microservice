@@ -55,7 +55,8 @@ func ToJson(i interface{}, w io.Writer) error {
 	return encoder.Encode(i)
 }
 
-func UpdateArtPiece(id int, ap *ArtPiece) error {
+func UpdateArtPiece(ap *ArtPiece) error {
+	id := ap.ID
 	_, pos, err := findArtPiece(id)
 	if err != nil {
 		return err
