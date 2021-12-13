@@ -10,7 +10,7 @@ import (
 // Create a new art piece
 //
 // responses:
-//	200: productResponse
+//	200: artPieceResponse
 //  422: errorValidation
 //  501: errorResponse
 

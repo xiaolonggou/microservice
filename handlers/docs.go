@@ -25,7 +25,7 @@ type artPieceResponseWrapper struct {
 	Body []data.ArtPiece
 }
 
-// swagger:parameters deleteProduct
+// swagger:parameters DeleteArtPiece
 type artIDParamsWrapper struct {
 	// The id of the art piece for which the operation relates
 	// in: path
@@ -48,4 +48,12 @@ type errorResponseWrapper struct {
 	// Description of the error
 	// in: body
 	Body GenericError
+}
+
+// Validation errors defined as an array of strings
+// swagger:response errorValidation
+type errorValidationWrapper struct {
+	// Collection of the errors
+	// in: body
+	Body ValidationError
 }
